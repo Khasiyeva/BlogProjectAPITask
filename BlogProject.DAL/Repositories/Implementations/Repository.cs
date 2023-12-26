@@ -51,19 +51,19 @@ namespace BlogProject.DAL.Repositories.Implementations
             return query;
         }
 
-        public Task<TEntity> GetByIdAsync(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await Table.FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public Task SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
 
         public void Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            Table.Update(entity);
         }
         public async Task Create(TEntity entity)
         {
@@ -72,7 +72,7 @@ namespace BlogProject.DAL.Repositories.Implementations
 
         public void Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            Table.Remove(entity);
         }
     }
 }

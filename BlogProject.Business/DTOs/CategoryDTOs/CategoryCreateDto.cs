@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogProject.Business.CategoryDTOs
+namespace BlogProject.Business.DTOs.CategoryDTOs
 {
     public record CategoryCreateDto
     {
@@ -14,9 +14,9 @@ namespace BlogProject.Business.CategoryDTOs
         public IFormFile? Logo { get; set; }
     }
 
-    public class CreateCategoryDtoValidation : AbstractValidator<CategoryCreateDto>
+    public class CategoryCreateDtoValidation : AbstractValidator<CategoryCreateDto>
     {
-        public CreateCategoryDtoValidation()
+        public CategoryCreateDtoValidation()
         {
             RuleFor(b => b.Name)
                 .NotNull()

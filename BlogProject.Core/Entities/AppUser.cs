@@ -1,4 +1,5 @@
-﻿using BlogProject.Core.Entities.Common;
+﻿
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BlogProject.Core.Entities
 {
-    public class Category:BaseEntity
-    {
+    public class AppUser : IdentityUser 
+    { 
         public string Name { get; set; }
-        public string? LogoUrl { get; set; }
-
+        public string Surname { get; set; }
+        public bool IsRemainded { get; set; }
     }
 }

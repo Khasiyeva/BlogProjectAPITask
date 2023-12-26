@@ -1,10 +1,12 @@
-using BlogProject.Business.CategoryDTOs;
+using BlogProject.Business.DTOs.CategoryDTOs;
 using BlogProject.Business.Services.Implementations;
 using BlogProject.Business.Services.Interfaces;
+using BlogProject.Core.Entities;
 using BlogProject.DAL.Context;
 using BlogProject.DAL.Repositories.Implementations;
 using BlogProject.DAL.Repositories.Intefaces;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogProject.API
@@ -19,10 +21,20 @@ namespace BlogProject.API
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddControllers();
+            builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
+            {
+                opt.Password.RequiredLength = 8;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._";
+                opt.Password.RequireNonAlphanumeric = true;
+                opt.Lockout.MaxFailedAccessAttempts = 3;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
             builder.Services.AddControllers().AddFluentValidation(opt =>
             {
-                opt.RegisterValidatorsFromAssembly(typeof(CreateCategoryDtoValidation).Assembly);
+                opt.RegisterValidatorsFromAssembly(typeof(CategoryCreateDtoValidation).Assembly);
+                opt.RegisterValidatorsFromAssembly(typeof(CategoryUpdateDtoValidation).Assembly);
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
