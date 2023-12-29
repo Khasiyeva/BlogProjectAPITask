@@ -54,12 +54,9 @@ namespace BlogProject.Business.Services.Implementations
             return await Categorys.ToListAsync();
         }
 
-        public Task<Category> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public async Task<Category> GetById(int id)
+        public async Task<Category> GetByIdAsync(int id)
         {
             if (id <= 0) throw new NegativeIdException();
 

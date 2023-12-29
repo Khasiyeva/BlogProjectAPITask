@@ -25,7 +25,7 @@ namespace BlogProject.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             Category category = await _service.GetByIdAsync(id);
             return StatusCode(StatusCodes.Status200OK, category);
