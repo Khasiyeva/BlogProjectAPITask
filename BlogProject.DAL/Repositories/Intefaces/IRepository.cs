@@ -20,7 +20,7 @@ namespace BlogProject.DAL.Repositories.Intefaces
         Task Create(TEntity entity);
         void Update(TEntity entity);
 
-        void Delete(TEntity entity);
+        Task Delete(int id);
         Task<int> SaveChangesAsync();
     }
 }

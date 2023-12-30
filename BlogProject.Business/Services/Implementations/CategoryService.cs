@@ -4,6 +4,7 @@ using BlogProject.Business.Exceptions;
 using BlogProject.Business.Exceptions.Account;
 using BlogProject.Business.Exceptions.CategoryException;
 using BlogProject.Business.Exceptions.Common;
+using BlogProject.Business.ExternalService.Interfaces;
 using BlogProject.Business.Helpers;
 using BlogProject.Business.Services.Interfaces;
 using BlogProject.Core.Entities;
@@ -12,9 +13,13 @@ using BlogProject.DAL.Repositories.Intefaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,13 +30,14 @@ namespace BlogProject.Business.Services.Implementations
         private readonly ICategoryRepository _repo;
         private readonly UserManager<AppUser> _userManager;
         private readonly IWebHostEnvironment _env;
+        private readonly ITokenService _tokenService;
 
-
-        public CategoryService(ICategoryRepository repo, UserManager<AppUser> userManager, IWebHostEnvironment env)
+        public CategoryService(ICategoryRepository repo, UserManager<AppUser> userManager, IWebHostEnvironment env,ITokenService tokenService)
         {
             _repo = repo;
             _userManager = userManager;
             _env = env;
+            _tokenService = tokenService;
         }
 
         public async Task<Category> Create(CategoryCreateDto Category)
@@ -109,18 +115,23 @@ namespace BlogProject.Business.Services.Implementations
             return false;
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task Delete(int id)
         {
-            if (id <= 0) throw new NegativeIdException();
-
-            Category category = await _repo.GetByIdAsync(id);
-            if (category == null) throw new CategoryNullException();
-            category.LogoUrl.DeleteFile(_env.WebRootPath, @"\Upload\Category\");
-            _repo.Delete(category);
-            int result = await _repo.SaveChangesAsync();
-
-            if (result > 0) return true;
-            return false;
+            await _repo.Delete(id);
+            await _repo.SaveChangesAsync();
         }
+
+        public async Task<TokenResponseDto> LoginAsync(LoginDto dto)
+        {
+            var user =await _userManager.FindByNameAsync(dto.UserNameOrEmail)?? await _userManager.FindByNameAsync(dto.UserNameOrEmail);
+            if (user == null) 
+                throw new UserNotFoundException();
+            if (!await _userManager.CheckPasswordAsync(user, dto.Password)) ;
+            throw new UserNotFoundException();
+
+            return _tokenService.CreateToken(user);
+        }
+
+        
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BlogProject.DAL.Repositories.Intefaces
 {
-    public interface ICategoryRepository: IRepository<Category>
+    public interface ICategoryRepository : IRepository<Category>
     {
-
+        Task Delete(int id);
     }
 }

@@ -70,9 +70,12 @@ namespace BlogProject.DAL.Repositories.Implementations
             await _table.AddAsync(entity);
         }
 
-        public void Delete(TEntity entity)
+        public async Task Delete(int id)
         {
-            Table.Remove(entity);
+            //TEntity entity=await GetByIdAsync(id);
+            //entity.IsDeleted=true;
+
+            (await GetByIdAsync(id)).IsDeleted = true;
         }
     }
 }

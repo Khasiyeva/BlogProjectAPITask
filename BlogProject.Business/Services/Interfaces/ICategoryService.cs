@@ -17,9 +17,9 @@ namespace BlogProject.Business.Services.Interfaces
             Task<Category> Create(CategoryCreateDto Category);
             Task<bool> Register(RegisterDtos registerDtos);
             Task<bool> Update(CategoryUpdateDto categorydto);
-            Task<bool> Delete(int id);
-           
-
+            Task Delete(int id);
+            Task<TokenResponseDto> LoginAsync(LoginDto dto);
+            
     }
 
     }

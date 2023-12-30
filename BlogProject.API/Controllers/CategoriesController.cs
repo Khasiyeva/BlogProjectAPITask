@@ -1,6 +1,7 @@
 ﻿using BlogProject.Business.DTOs.CategoryDTOs;
 using BlogProject.Business.Services.Interfaces;
 using BlogProject.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace BlogProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _service;
@@ -50,16 +52,10 @@ namespace BlogProject.API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete([FromForm]int id)
         {
-
-
-            bool result = await _service.Delete(id);
-            if (result)
-            {
-                return StatusCode(StatusCodes.Status200OK, $"{id} is Deleted");
-            }
-            return StatusCode(StatusCodes.Status409Conflict);
+           await _service.Delete(id);
+            return Ok();
         }
     }
 }

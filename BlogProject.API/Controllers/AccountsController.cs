@@ -15,10 +15,19 @@ namespace BlogProject.API.Controllers
         {
             _service = service;
         }
-        [HttpPost]
-        public async Task<bool> Register([FromForm] RegisterDtos registerDtos)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Register([FromForm] RegisterDtos registerDtos)
         {
-            return await _service.Register(registerDtos);
+            await _service.Register(registerDtos);
+            return Ok();
+
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login([FromForm]LoginDto loginDto)
+        {
+            var result =await _service.LoginAsync(loginDto);
+            return Ok(result);
 
         }
     }
